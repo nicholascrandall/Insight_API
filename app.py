@@ -1,17 +1,20 @@
+import dotenv
 from flask import Flask
+from dotenv import load_dotenv
+
+load_dotenv()
  
 DEBUG = True
 PORT = 8000
- 
-# Initialize an instance of the Flask class.
-# This starts the website!
 app = Flask(__name__)
- 
-# The default URL ends in / ("my-website.com/").
+
 @app.route('/')
-def index():
-    return 'hi'
- 
-# Run the app when the program starts!
+def hello():
+    return 'hi, app is running'
+
+@app.route('/test')
+def test():
+    return 'testing route'
+
 if __name__ == '__main__':
     app.run(debug=DEBUG, port=PORT)
