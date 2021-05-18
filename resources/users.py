@@ -45,7 +45,46 @@ def register():
 
         return jsonify(
             data=created_user_dict,
-            message=f"Successfully registered!",
+            message="Successfully registered!",
             status=201
         ), 201
 
+@users.route('/login', methods=['POST'])
+def login():
+    payload = request.get_json()
+    payload['email'] = payload['email'].lower()
+    payload['username'] = payload['username'].lower()
+    print(payload)
+
+    # lookup user by email
+
+    try:
+        user = models.User.get(models.User.email == payload['email'])
+
+        # if the user exists
+        user_dict = model_to_dict(user)
+        password_correct = check_password_hash(user_dict['password'], payload['password'])
+
+        if (password_correct):
+            login_user(user)
+            user_dict.pop('password')
+
+            return jsonify(
+                data=user_dict,
+                message=f"Successfully logged in {user_dict['email']}",
+                status=200
+            ), 200
+        else:
+            print('pw is no good')
+            return jsonify(
+                data={},
+                message="Email or password is incorrect",
+                status=401
+            ), 401
+    except models.DoesNotExist:
+        print("Email not found")
+        return jsonify(
+            data={},
+            message="Email or password is incorrect",
+            status=401
+        ), 401
