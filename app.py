@@ -3,7 +3,7 @@ from flask import Flask
 from dotenv import load_dotenv
 from flask import Blueprint
 from flask_cors import CORS
-from flask_login import LoginManager, login_manager
+from flask_login import LoginManager
 from resources.users import users
 import models
 import os
@@ -24,7 +24,7 @@ def load_user(user_id):
 
 CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
 
-app.register_blueprint(users, url_prefix='/api/v1/users')
+app.register_blueprint(users, url_prefix='/users')
 
 @app.route('/')
 def hello():
@@ -34,5 +34,10 @@ def hello():
 def test():
     return 'testing route'
 
+@app.route('/stocks/<symbol>')
+def show_stock(symbol):
+    return "Show page for {}".format(symbol)
+
 if __name__ == '__main__':
+    models.initialize()
     app.run(debug=DEBUG, port=PORT)
