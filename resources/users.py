@@ -1,3 +1,4 @@
+from flask_login.utils import logout_user
 import models
 from flask import Blueprint, request, jsonify
 from flask_bcrypt import generate_password_hash, check_password_hash
@@ -88,3 +89,13 @@ def login():
             message="Email or password is incorrect",
             status=401
         ), 401
+
+@users.route('/logout', methods=['GET'])
+def logout():
+    logout_user()
+
+    return jsonify(
+        data={},
+        status=200,
+        message="Successfully logged out"
+    ), 200
