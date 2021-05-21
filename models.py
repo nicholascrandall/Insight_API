@@ -7,7 +7,7 @@ class User(UserMixin, Model):
     username=CharField(unique=True)
     email=CharField(unique=True)
     password=CharField()
-    follow_list=CharField()
+    follow_list=CharField(null=True, default={})
     
     class Meta:
         database = DATABASE
