@@ -53,14 +53,13 @@ def register():
 @users.route('/login', methods=['POST'])
 def login():
     payload = request.get_json()
-    payload['email'] = payload['email'].lower()
     payload['username'] = payload['username'].lower()
     print(payload)
 
     # lookup user by email
 
     try:
-        user = models.User.get(models.User.email == payload['email'])
+        user = models.User.get(models.User.username == payload['username'])
 
         # if the user exists
         user_dict = model_to_dict(user)
@@ -72,21 +71,21 @@ def login():
 
             return jsonify(
                 data=user_dict,
-                message=f"Successfully logged in {user_dict['email']}",
+                message=f"Successfully logged in {user_dict['username']}",
                 status=200
             ), 200
         else:
             print('pw is no good')
             return jsonify(
                 data={},
-                message="Email or password is incorrect",
+                message="Username or password is incorrect",
                 status=401
             ), 401
     except models.DoesNotExist:
-        print("Email not found")
+        print("Username not found")
         return jsonify(
             data={},
-            message="Email or password is incorrect",
+            message="Username or password is incorrect",
             status=401
         ), 401
 
