@@ -1,5 +1,5 @@
 import dotenv
-from flask import Flask
+from flask import Flask, after_this_request
 from dotenv import load_dotenv
 from flask import Blueprint
 from flask_cors import CORS
@@ -22,6 +22,18 @@ login_manager.init_app(app)
 def load_user(user_id):
     return models.User.get(models.User.id == user_id)
 
+@app.before_request
+def before_request():
+
+    """Connect to the db before each request"""
+    models.DATABASE.connect()
+
+    @after_this_request
+    def after_request(response):
+        """Close the db connection after each request"""
+        models.DATABASE.close()
+        return response
+
 CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/users')
@@ -41,3 +53,7 @@ def show_stock(symbol):
 if __name__ == '__main__':
     models.initialize()
     app.run(debug=DEBUG, port=PORT)
+
+if os.environ.get('FLASK_ENV') != 'development':
+  print('\non heroku!')
+  models.initialize()
