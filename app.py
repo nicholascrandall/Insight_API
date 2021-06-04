@@ -34,7 +34,7 @@ def before_request():
         models.DATABASE.close()
         return response
 
-CORS(users, origins=['http://localhost:3000', 'https://crandallinsight-app.herokuapp.com'], supports_credentials=True)
+CORS(users, origins=['http://localhost:3000', 'https://insight-nc.herokuapp.com'], supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/users')
 
