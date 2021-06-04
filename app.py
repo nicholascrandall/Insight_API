@@ -44,7 +44,7 @@ def hello():
 
 @app.route('/test')
 def test():
-    return 'testing route'
+    return 'testing route ababa'
 
 @app.route('/stocks/<symbol>')
 def show_stock(symbol):
