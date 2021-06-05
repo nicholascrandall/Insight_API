@@ -54,7 +54,6 @@ def register():
 def login():
     payload = request.get_json()
     payload['username'] = payload['username'].lower()
-    print(payload)
 
     # lookup user by email
 
